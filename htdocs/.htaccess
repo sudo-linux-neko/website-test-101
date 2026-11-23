@@ -1,0 +1,21 @@
+DirectoryIndex index.php
+# Protect data (posts/users/comments)
+<FilesMatch "^\.ht">
+  Require all denied
+</FilesMatch>
+# Gzip (fewer bytes, faster on free plan)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/json application/javascript
+</IfModule>
+# Browser cache: CSS/JS 1 year (saves hits = biggest InfinityFree limit)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+</IfModule>
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

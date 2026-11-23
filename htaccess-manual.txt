@@ -1,0 +1,32 @@
+CREATE THESE 2 FILES MANUALLY IN FILE MANAGER (fix for JSON.parse upload error)
+================================================================================
+InfinityFree web File Manager > Upload files FAILS on dotfiles (.htaccess).
+It returns HTML instead of JSON -> "JSON.parse: unexpected character at line 1".
+
+DO THIS INSTEAD:
+1. Upload everything EXCEPT the 2 .htaccess files first (drag works).
+2. Then in File Manager, go into htdocs/ -> New File -> name ".htaccess" -> paste SECTION A.
+   Then go into htdocs/data/ -> New File -> name ".htaccess" -> paste SECTION B.
+   OR use FTP FileZilla (handles dotfiles fine) - see README.
+
+------------------- SECTION A: paste into htdocs/.htaccess -------------------
+DirectoryIndex index.php
+<FilesMatch "^\.ht">
+  Require all denied
+</FilesMatch>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/json application/javascript
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+</IfModule>
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+------------------- SECTION B: paste into htdocs/data/.htaccess -------------------
+Require all denied
